@@ -17,15 +17,18 @@ let sumArr:number[] = []
 let sum = 0
 
 buttonTablet20.addEventListener("click", function () {
-    score ++
+    
     sumArr.push(price)
     sum = sumArr.reduce((acc,num) => acc + num)
     const toStringSum = sum.toString()
-  let scoresum = score.toString()
-  sumBasket.innerText = toStringSum
+    sumBasket.innerText = toStringSum
+
+    score ++
+  let scoresum = JSON.stringify(score)
   window.localStorage.setItem('scoreBasket',scoresum)
   let basket = window.localStorage.getItem('scoreBasket')
   scoreBascet.textContent = basket
+  
   const p = document.createElement("p")
   p.innerText = `${tabletName20.innerText} : ${productPrice.innerText}`
   productInBasket.appendChild(p)
@@ -43,15 +46,18 @@ buttonTablet20.addEventListener("click", function () {
 })
 
 buttonTablet10.addEventListener("click", function () {
-    score ++
+   
     sumArr.push(price)
     sum = sumArr.reduce((acc,num) => acc + num)
     const toStringSum = sum.toString()
-  let scoresum = score.toString()
-  sumBasket.innerText = toStringSum
+     sumBasket.innerText = toStringSum
+
+  score ++
+  let scoresum = JSON.stringify(score)
   window.localStorage.setItem('scoreBasket',scoresum)
   let basket = window.localStorage.getItem('scoreBasket')
   scoreBascet.textContent = basket
+  
   const p = document.createElement("p")
   p.innerText = `${tabletName10.innerText} : ${productPrice.innerText}`
   productInBasket.appendChild(p)
@@ -69,15 +75,17 @@ buttonTablet10.addEventListener("click", function () {
 })
 
 buttonTablet12.addEventListener("click", function () {
-    score ++
-    sumArr.push(price)
+     sumArr.push(price)
     sum = sumArr.reduce((acc,num) => acc + num)
     const toStringSum = sum.toString()
     sumBasket.innerText = toStringSum
-  let scoresum = score.toString()
+
+  score ++
+  let scoresum = JSON.stringify(score)
   window.localStorage.setItem('scoreBasket',scoresum)
   let basket = window.localStorage.getItem('scoreBasket')
   scoreBascet.textContent = basket
+
   const p = document.createElement("p")
   p.innerText = `${tabletName12.innerText} : ${productPrice.innerText}`
   productInBasket.appendChild(p)
