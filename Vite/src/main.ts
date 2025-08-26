@@ -1,104 +1,89 @@
 import './style.css'
-const scoreBascet = document.querySelector(".basketscore") as HTMLParagraphElement
-const sumBasket = document.querySelector(".sumBasket") as HTMLParagraphElement
-const buttonTablet20 = document.querySelector("#tablet-20")  as HTMLButtonElement
-const buttonTablet10 = document.querySelector("#tablet-10") as HTMLButtonElement
-const buttonTablet12 = document.querySelector("#tablet-12") as HTMLButtonElement
-const productInBasket = document.querySelector(".productInBasket") as HTMLDivElement
-const productPrice = document.querySelector(".productPrice") as HTMLParagraphElement
-const tabletName20 = document.querySelector(".tablet-20")as HTMLHeadingElement
-const tabletName10 = document.querySelector(".tablet-10")as HTMLHeadingElement
-const tabletName12 = document.querySelector(".tablet-12")as HTMLHeadingElement
-const remove = document.querySelector(".remove") as HTMLButtonElement
+const button = document.querySelectorAll<HTMLButtonElement>(".productButton")
+const divProduct = document.querySelector<HTMLDivElement>(".productInBasket")
+const basketscore = document.querySelector<HTMLParagraphElement>(".basketscore")
+const basketsum = document.querySelector<HTMLParagraphElement>(".sumBasket")
 
-const price = Number(productPrice.innerText.replace("€",""))
+type Basket = {products: string[],
+  quantity?: string,
+  sum?: string,
+}
+
 let score = 0
-let sumArr:number[] = []
 let sum = 0
+let allPrice = 0
+let BasketinLocalStorage:Basket = {products: []}
 
-buttonTablet20.addEventListener("click", function () {
+
+button.forEach((elem) => {
+         elem.addEventListener("click", function (){
+         score ++
+         const JSONscore = JSON.stringify(score)
+         if (basketscore) {
+          basketscore.innerText = JSONscore
+        }
+         
+        const product = elem.closest(".divProduct")
+        const price = product?.querySelector<HTMLParagraphElement>(".productPrice")
+        allPrice = Number(price?.innerText.replace("€",""))
+        sum += allPrice
+        const sumToString = JSON.stringify(sum)
+        if (basketsum) {
+          basketsum.innerText = sumToString
+        }
+     
+        const divInBasket = document.createElement("div")
+        divInBasket.className = "divfor"
+        const productName = product?.querySelector("h2")
+        const p = document.createElement("p")
+        const removeButton = document.createElement("button")
+        removeButton.className = "removeButton"
+        removeButton.innerText = "Удалить товар из корзины"
+        p.innerText = `${productName?.innerText} - ${price?.innerText}`
+        divInBasket?.appendChild(p)
+        divInBasket?.appendChild(removeButton)
+        divProduct?.appendChild(divInBasket)
+
+
+        BasketinLocalStorage.products.push(productName?.textContent || '')
+        BasketinLocalStorage.quantity =  JSONscore
+        BasketinLocalStorage.sum = sumToString
+        const BasketString = JSON.stringify(BasketinLocalStorage)
+        window.localStorage.setItem("basket",BasketString)
+       
+        
+        removeButton.addEventListener("click",function () {
+        const divInBasket = document.querySelector(".divfor")
+        score --
+         const JSONscore = JSON.stringify(score)
+         if (basketscore) {
+          basketscore.innerText = JSONscore
+        }
+         
+         sum -= allPrice
+        const sumToString = JSON.stringify(sum)
+        if (basketsum) {
+          basketsum.innerText = sumToString
+        }
+
+        divInBasket?.remove()
+    })
+
     
-    sumArr.push(price)
-    sum = sumArr.reduce((acc,num) => acc + num)
-    const toStringSum = sum.toString()
-    sumBasket.innerText = toStringSum
-
-    score ++
-  let scoresum = JSON.stringify(score)
-  window.localStorage.setItem('scoreBasket',scoresum)
-  let basket = window.localStorage.getItem('scoreBasket')
-  scoreBascet.textContent = basket
-  
-  const p = document.createElement("p")
-  p.innerText = `${tabletName20.innerText} : ${productPrice.innerText}`
-  productInBasket.appendChild(p)
-  
-  remove.addEventListener("click", function () {
-  sumArr = []
-  score = 0
-  window.localStorage.removeItem('scoreBasket')
-  productInBasket.innerHTML = "",
-  sum = 0
-  sumBasket.innerText = "0"
-  basket = "0"
-  scoreBascet.innerText = "0"
 })
 })
 
-buttonTablet10.addEventListener("click", function () {
-   
-    sumArr.push(price)
-    sum = sumArr.reduce((acc,num) => acc + num)
-    const toStringSum = sum.toString()
-     sumBasket.innerText = toStringSum
+const remove = document.querySelector<HTMLButtonElement>(".remove")
 
-  score ++
-  let scoresum = JSON.stringify(score)
-  window.localStorage.setItem('scoreBasket',scoresum)
-  let basket = window.localStorage.getItem('scoreBasket')
-  scoreBascet.textContent = basket
-  
-  const p = document.createElement("p")
-  p.innerText = `${tabletName10.innerText} : ${productPrice.innerText}`
-  productInBasket.appendChild(p)
-
-  remove.addEventListener("click", function () {
-  sumArr = []
-  score = 0
-  window.localStorage.removeItem('scoreBasket')
-  productInBasket.innerHTML = "",
-  sum = 0
-  sumBasket.innerText = "0"
-  basket = "0"
-  scoreBascet.innerText = "0"
+remove?.addEventListener("click", function () {
+   divProduct?.replaceChildren()
+   if (basketsum) {
+    basketsum.innerText = "0"
+   }
+   sum = 0
+   if (basketscore) {
+   basketscore.innerText = "0"
+ }
+ score = 0
+ window.localStorage.removeItem("basket")
 })
-})
-
-buttonTablet12.addEventListener("click", function () {
-     sumArr.push(price)
-    sum = sumArr.reduce((acc,num) => acc + num)
-    const toStringSum = sum.toString()
-    sumBasket.innerText = toStringSum
-
-  score ++
-  let scoresum = JSON.stringify(score)
-  window.localStorage.setItem('scoreBasket',scoresum)
-  let basket = window.localStorage.getItem('scoreBasket')
-  scoreBascet.textContent = basket
-
-  const p = document.createElement("p")
-  p.innerText = `${tabletName12.innerText} : ${productPrice.innerText}`
-  productInBasket.appendChild(p)
-
-  remove.addEventListener("click", function () {
-  sumArr = []
-  score = 0
-  window.localStorage.removeItem('scoreBasket')
-  productInBasket.innerHTML = "",
-  sum = 0
-  sumBasket.innerText = "0"
-  basket = "0"
-  scoreBascet.innerText = "0"
-})
-})
-
